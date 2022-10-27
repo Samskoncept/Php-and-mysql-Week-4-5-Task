@@ -5,7 +5,7 @@ function db()
     //set your configs here
     $host = "localhost";
     $user = "root";
-    $db = "useraccounts";
+    $db = "zuriphp";
     $password = "";
     $conn = mysqli_connect($host, $user, $password, $db);
     if (!$conn) {

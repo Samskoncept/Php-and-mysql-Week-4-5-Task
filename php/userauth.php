@@ -83,11 +83,20 @@ function loginUser($email, $password)
 
 function resetPassword($email, $password)
 {
-    //create a connection variable using the db function in config.php
     $conn = db();
-    echo "<h1 style='color: red'>RESET YOUR PASSWORD (IMPLEMENT ME)</h1>";
-    //open connection to the database and check if username exist in the database
-    //if it does, replace the password with $password given
+    $query = " SELECT email FROM students WHERE email='$email'";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) >= 1) {
+        $sql = "UPDATE students set password='$password' where email='$email'";
+        if (mysqli_query($conn, $sql)) {
+            echo 'Password changed sucessfully';
+        } else {
+            echo "<script>alert('an error occured,try again')</script>";
+        }
+    } else {
+        echo "<script>alert('User does not exist')</script>";
+        header('refresh:2;url=../forms/login.html');
+    }
 }
 
 function getusers()
@@ -126,5 +135,17 @@ function getusers()
 function deleteaccount($id)
 {
     $conn = db();
-    //delete user with the given id from the database
+    if (
+        mysqli_num_rows(
+            mysqli_query($conn, "SELECT * FROM students WHERE id=$id")
+        ) >= 1
+    ) {
+        $sql = "DELETE FROM students WHERE id='$id'";
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>alert('deleted sucessfully')</script><br>";
+            header('refresh:1;url=action.php?all=');
+        } else {
+            echo "<script>alert('error')</script>";
+        }
+    }
 }
